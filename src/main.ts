@@ -1,3 +1,21 @@
-import chalk = require("chalk");
+import "dotenv/config";
+import chalk from "chalk";
+import { env } from "./Env.js";
+import { Database } from "./db/Database.js";
 
-console.log(chalk.green("Hello world"));
+class MainApp {
+    database = new Database();
+
+    async main() {
+        await this.init();
+    }
+
+    async init() {
+        if (!env.checkEnv()) env.initEnv();
+        this.database.createConnection();
+        this.database.initDb();
+    }
+}
+
+const app = new MainApp();
+app.main();
