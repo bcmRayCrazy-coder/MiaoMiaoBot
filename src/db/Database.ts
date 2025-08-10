@@ -2,13 +2,13 @@ import knex from "knex";
 import type { Knex } from "knex";
 import { env } from "../Env.js";
 import chalk from "chalk";
-import { VersionTable } from "./VersionTable.js";
+import { Version, VersionTable } from "./Version.js";
 
 export class Database {
-    connection: Knex | undefined;
+    static connection: Knex | undefined;
 
     createConnection() {
-        this.connection = knex({
+        Database.connection = knex({
             client: "sqlite3",
             connection: {
                 filename: this.getDbPath(),
@@ -18,13 +18,15 @@ export class Database {
     }
 
     async initDb() {
-        if (!this.connection)
+        if (!Database.connection)
             return console.error(chalk.red("Db not connected"));
 
-        if (!(await this.connection.schema.hasTable(VersionTable.tableName)))
-            await VersionTable.createTable(this.connection);
-        
-        VersionTable.setVersion(this.connection,{major:2,minor:1});
+        if (
+            !(await Database.connection.schema.hasTable(VersionTable.tableName))
+        )
+            await VersionTable.createTable();
+
+        VersionTable.setVersion(new Version(2, 0));
     }
 
     getDbPath() {
