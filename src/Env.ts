@@ -1,7 +1,7 @@
-import { writeFileSync } from "fs";
+import chalk from "chalk";
+import fs from "fs";
 
 class Env {
-    private _envTemplate = "ENV_TYPE=DEPLOY\nNC_HOST=\nNC_PORT=\nNC_TOKEN=";
     envType: string = process.env.ENV_TYPE || "";
 
     checkEnv() {
@@ -9,7 +9,13 @@ class Env {
     }
 
     initEnv() {
-        writeFileSync("./.env", this._envTemplate);
+        fs.createReadStream("./.env_template").pipe(
+            fs.createWriteStream("./.env"),
+        ).on('close',()=>{
+            console.warn(chalk.red("Please config .env file first!"))
+            process.exit(0);
+        })
+        // writeFileSync("./.env", readFileSync("./.env_template"));
     }
 
     isTestEnv() {

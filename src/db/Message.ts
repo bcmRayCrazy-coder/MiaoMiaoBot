@@ -64,9 +64,17 @@ export class MessageTable {
         );
     }
 
+    static async increaseMessageCounter(groupId: number, userId: number) {
+        if (!Database.connection)
+            return console.error("Database connection not created");
+
+        console.log(await this.selectMessage({ groupId, userId }));
+    }
+
     static async insertMessage(message: Message) {
         if (!Database.connection)
             return console.error("Database connection not created");
+
         await Database.connection(this.tableName).insert(message.toJSON());
     }
 
@@ -75,8 +83,39 @@ export class MessageTable {
             return console.error("Database connection not created");
 
         const _raw = await Database.connection(this.tableName)
-            .select()
+            .select("*")
             .where(data);
+        var result: Message[] = [];
+        _raw.forEach((v) => {
+            result.push(Message.parseJSON(v));
+        });
+        return result;
+    }
+
+    static async selectMessageById(id: number): Promise<Message | void> {
+        if (!Database.connection)
+            return console.error("Database connection not created");
+
+        const _raw = await Database.connection(this.tableName)
+            .select("*")
+            .where({ id });
+        if (_raw.length == 0) return;
+        return Message.parseJSON(_raw[0]);
+    }
+
+    static async selectMessageByTimeRange(
+        mustCondition: any,
+        startTime: HourTime,
+        endTime: HourTime,
+    ): Promise<Message[] | void> {
+        if (!Database.connection)
+            return console.error("Database connection not created");
+
+        const _raw = await Database.connection(this.tableName)
+            .select("*")
+            .where(mustCondition)
+            .andWhere("time", ">=", startTime.toTimestamp())
+            .andWhere("time", "<=", endTime.toTimestamp());
         var result: Message[] = [];
         _raw.forEach((v) => {
             result.push(Message.parseJSON(v));
@@ -87,6 +126,8 @@ export class MessageTable {
     static async updateMessage(message: Message) {
         if (!Database.connection)
             return console.error("Database connection not created");
-        // await Database.connection(this.tableName).select()
+        await Database.connection(this.tableName)
+            .where({ id: message.id })
+            .update(message.toJSON());
     }
 }

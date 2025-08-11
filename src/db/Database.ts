@@ -3,6 +3,7 @@ import type { Knex } from "knex";
 import { env } from "../Env.js";
 import chalk from "chalk";
 import { Version, VersionTable } from "./Version.js";
+import { MessageTable } from "./Message.js";
 
 export class Database {
     static connection: Knex | undefined;
@@ -25,6 +26,11 @@ export class Database {
             !(await Database.connection.schema.hasTable(VersionTable.tableName))
         )
             await VersionTable.createTable();
+
+        if (
+            !(await Database.connection.schema.hasTable(MessageTable.tableName))
+        )
+            await MessageTable.createTable();
 
         VersionTable.setVersion(new Version(2, 0));
     }

@@ -11,7 +11,7 @@ class MainApp {
     }
 
     async init() {
-        if (!env.checkEnv()) env.initEnv();
+        if (!env.checkEnv()) return env.initEnv();
         this.database.createConnection();
         this.database.initDb();
     }
