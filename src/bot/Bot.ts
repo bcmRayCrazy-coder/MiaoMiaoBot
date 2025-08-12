@@ -2,8 +2,14 @@ import { NCWebsocket } from "node-napcat-ts";
 import { env } from "../Env.js";
 import { StatisticListener } from "./StatisticListener.js";
 
-class Bot {
+/**
+ * { groupId : { userId : nickname } }
+ */
+export type GroupNicknameCache = Record<number, Record<number, string>>;
+
+export class Bot {
     bot: NCWebsocket;
+    groupNicknameCache: GroupNicknameCache = {};
     constructor() {
         this.bot = new NCWebsocket(
             {
@@ -22,9 +28,7 @@ class Bot {
         );
     }
 
-    listen(){
-        new StatisticListener().listen();
+    listen() {
+        new StatisticListener(this).listen();
     }
 }
-
-export let bot = new Bot();

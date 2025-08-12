@@ -1,7 +1,23 @@
 export class HourTime {
+    /**
+     * UTC FUllyear
+     */
     year: number;
+
+    /**
+     * UTC Month
+     * Start from 0 (Jan)
+     */
     month: number;
+
+    /**
+     * UTC Date
+     */
     day: number;
+
+    /**
+     * UTC Hour
+     */
     hour: number;
 
     constructor(y: number, m: number, d: number, h: number) {
@@ -9,19 +25,6 @@ export class HourTime {
         this.month = m;
         this.day = d;
         this.hour = h;
-    }
-
-    setYear(n: number) {
-        this.year = n;
-    }
-    setMonth(n: number) {
-        this.month = n;
-    }
-    setDay(n: number) {
-        this.day = n;
-    }
-    setHour(n: number) {
-        this.hour = n;
     }
 
     toString() {
@@ -35,10 +38,14 @@ export class HourTime {
     static fromTimestamp(time: number) {
         const date = new Date(time);
         return new HourTime(
-            date.getFullYear(),
-            date.getMonth(),
+            date.getUTCFullYear(),
+            date.getUTCMonth(),
             date.getUTCDate(),
-            date.getHours(),
+            date.getUTCHours(),
         );
+    }
+
+    static fromCurrentTime() {
+        return HourTime.fromTimestamp(Date.now());
     }
 }
