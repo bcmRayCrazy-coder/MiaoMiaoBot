@@ -141,3 +141,5 @@ vite.config.ts.timestamp-*
 yarn.lock
 
 db/*
+
+.DS_Store

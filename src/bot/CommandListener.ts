@@ -3,7 +3,11 @@ import { BotEventListener } from "./BotEventListener.js";
 import { CommandManager } from "./command/CommandManager.js";
 import type { Bot } from "./Bot.js";
 import { HelpCommand } from "./command/HelpCommand.js";
-import { DayStatisticCommand } from "./command/StatisticCommand.js";
+import {
+    DayStatisticCommand,
+    MonthStatisticCommand,
+    YearStatisticCommand,
+} from "./command/StatisticCommand.js";
 
 export class CommandListener extends BotEventListener {
     groupCommandManager = new CommandManager();
@@ -23,6 +27,8 @@ export class CommandListener extends BotEventListener {
     registerCommands() {
         this.groupCommandManager.register(new HelpCommand(this.bot));
         this.groupCommandManager.register(new DayStatisticCommand(this.bot));
+        this.groupCommandManager.register(new MonthStatisticCommand(this.bot));
+        this.groupCommandManager.register(new YearStatisticCommand(this.bot));
     }
 
     onGroupMessage(ctx: GroupMessage) {

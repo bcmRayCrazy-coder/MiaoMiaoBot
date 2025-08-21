@@ -59,3 +59,35 @@ export class DayStatisticCommand extends StatisticCommand {
         };
     }
 }
+
+export class MonthStatisticCommand extends StatisticCommand {
+    name = "月统计";
+    description = "获取本月统计信息";
+    usage = "月统计";
+    id = "#月统计";
+    alias = ["月统计"];
+
+    getTimeRange(args: string[]): { startTime: HourTime; endTime: HourTime } {
+        const now = HourTime.fromCurrentTime();
+        return {
+            startTime: new HourTime(now.year, now.month, 0, 0),
+            endTime: now,
+        };
+    }
+}
+
+export class YearStatisticCommand extends StatisticCommand {
+    name = "年统计";
+    description = "获取本年统计信息";
+    usage = "年统计";
+    id = "#年统计";
+    alias = ["年统计"];
+
+    getTimeRange(args: string[]): { startTime: HourTime; endTime: HourTime } {
+        const now = HourTime.fromCurrentTime();
+        return {
+            startTime: new HourTime(now.year, 0, 0, 0),
+            endTime: now,
+        };
+    }
+}
