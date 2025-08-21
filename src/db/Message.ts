@@ -1,5 +1,6 @@
 import { HourTime } from "../Time.js";
 import { Database } from "./Database.js";
+import { DataDriver } from "./DataDriver.js";
 
 export class Message {
     id: number | null;
@@ -47,7 +48,7 @@ export class Message {
     }
 }
 
-export class MessageCount {
+export class MessageCount extends DataDriver {
     groupId: number;
     startTime: HourTime;
     endTime: HourTime;
@@ -58,6 +59,7 @@ export class MessageCount {
     data: Record<number, number> = {};
 
     constructor(groupId: number, startTime: HourTime, endTime: HourTime) {
+        super();
         this.groupId = groupId;
         this.startTime = startTime;
         this.endTime = endTime;

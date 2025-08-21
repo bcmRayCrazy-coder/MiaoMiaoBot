@@ -1,18 +1,18 @@
 import { Canvas, createCanvas, registerFont } from "canvas";
-import * as echarts from "echarts/types/dist/core";
+// @ts-ignore
+import * as echarts from "echarts";
 import type { ECharts } from "echarts/types/dist/echarts";
 import { readFileSync } from "fs";
 
 const fontFamily = "HiraginoSansGB";
 const themeName = "miaoTheme";
-registerFont("res/HiraginoSansGB.ttf", { family: fontFamily });
+registerFont("res/HiraginoSansGB.ttc", { family: fontFamily });
 echarts.registerTheme(
     themeName,
     JSON.parse(readFileSync("res/echartsTheme.json").toString("utf-8")),
 );
 
 export class Chart {
-    
     canvas: Canvas;
     chart: ECharts;
 
