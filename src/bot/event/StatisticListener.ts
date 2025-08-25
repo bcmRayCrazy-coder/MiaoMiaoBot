@@ -11,7 +11,11 @@ export class StatisticListener extends BotEventListener {
     }
 
     onGroupMessage(ctx: GroupMessage) {
-        this.cacheNickname(ctx.group_id, ctx.user_id, ctx.sender.card || ctx.sender.nickname);
+        this.cacheNickname(
+            ctx.group_id,
+            ctx.user_id,
+            ctx.sender.card || ctx.sender.nickname,
+        );
         MessageTable.increaseMessageCounter(ctx.group_id, ctx.user_id);
     }
 

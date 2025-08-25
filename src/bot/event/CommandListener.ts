@@ -8,6 +8,8 @@ import {
     MonthStatisticCommand,
     YearStatisticCommand,
 } from "../command/StatisticCommand.js";
+import { InfoCommand } from "../command/InfoCommand.js";
+import HelpMessage from "../message/HelpMessage.js";
 
 export class CommandListener extends BotEventListener {
     groupCommandManager = new CommandManager();
@@ -26,6 +28,7 @@ export class CommandListener extends BotEventListener {
 
     registerCommands() {
         this.groupCommandManager.register(new HelpCommand(this.bot));
+        this.groupCommandManager.register(new InfoCommand(this.bot));
         this.groupCommandManager.register(new DayStatisticCommand(this.bot));
         this.groupCommandManager.register(new MonthStatisticCommand(this.bot));
         this.groupCommandManager.register(new YearStatisticCommand(this.bot));
@@ -39,10 +42,8 @@ export class CommandListener extends BotEventListener {
             _0message.type == "at" &&
             _0message.data.qq == this.bot.selfId.toString()
         ) {
-            return this.bot.messageSender.sendGroupMsg(
-                ctx.group_id,
-                this.bot.getHelpMessage(),
-            );
+            this.bot.messageSender.sendGroupMsg(ctx.group_id, HelpMessage);
+            return;
         }
 
         if (_0message.type != "text") return;

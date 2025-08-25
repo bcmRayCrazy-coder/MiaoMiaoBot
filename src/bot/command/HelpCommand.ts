@@ -1,5 +1,5 @@
-import { Structs } from "node-napcat-ts";
 import { CommandBase } from "./CommandBase.js";
+import HelpMessage from "../message/HelpMessage.js";
 
 export class HelpCommand extends CommandBase {
     name = "喵喵帮助";
@@ -9,9 +9,6 @@ export class HelpCommand extends CommandBase {
     alias = ["喵喵帮助"];
 
     execute(groupId: number, senderId: number, args: string[]) {
-        this.bot.bot.send_group_msg({
-            group_id: groupId,
-            message: this.bot.getHelpMessage(),
-        });
+        this.bot.messageSender.sendGroupMsg(groupId, HelpMessage);
     }
 }

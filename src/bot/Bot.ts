@@ -42,7 +42,7 @@ export class Bot {
             .then(async () => {
                 const loginInfo = await this.bot.get_login_info();
                 this.selfId = loginInfo.user_id;
-                
+
                 this.messageSender.startPolling();
             })
             .catch((err) => {
@@ -57,10 +57,6 @@ export class Bot {
     listen() {
         new StatisticListener(this).listen();
         new CommandListener(this).listen();
-    }
-
-    getHelpMessage(): SendMessageSegment[] {
-        return [Structs.text("喵喵帮助信息")];
     }
 
     async getGroupNickname(groupId: number, userId: number) {

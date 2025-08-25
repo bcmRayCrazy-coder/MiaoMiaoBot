@@ -17,7 +17,7 @@ class Env {
     napcat: EnvNapcatConfig = {
         host: process.env.NC_HOST || "127.0.0.1",
         port: parseInt(process.env.NC_PORT || "6020"),
-        token: process.env.NC_TOKEN || "miaomiao",
+        token: process.env.NC_TOKEN || "",
         protocol: (process.env.NC_PROTOCOL as "ws" | "wss") || "ws",
     };
     bot: EnvBotConfig = {
@@ -29,13 +29,12 @@ class Env {
     }
 
     initEnv() {
-        fs.createReadStream("./.env_template")
+        fs.createReadStream("./.env.template")
             .pipe(fs.createWriteStream("./.env"))
             .on("close", () => {
                 console.warn(chalk.red("Please config .env file first!"));
                 process.exit(0);
             });
-        // writeFileSync("./.env", readFileSync("./.env_template"));
     }
 
     isTestEnv() {
