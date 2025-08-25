@@ -3,7 +3,7 @@ import { CommandBase } from "./CommandBase.js";
 import { HourTime } from "../../Time.js";
 import { MessageCount } from "../../db/Message.js";
 import { MessageCountPieChart } from "../../image/MessageCountChart.js";
-import { safeParseInt } from "../../util.js";
+import { safeParseInt, sortRecord } from "../../util.js";
 
 class StatisticCommand extends CommandBase {
     rangeName = "";
@@ -26,13 +26,18 @@ class StatisticCommand extends CommandBase {
         const chart = new MessageCountPieChart(650, 400, 12);
 
         await messageCount.fetch();
-        const chartData = await messageCount.toChartData(async (_id) => {
+        var chartData = await messageCount.toChartData(async (_id) => {
             const id = safeParseInt(_id);
             if (!id) return null;
             const nickname = await this.bot.getGroupNickname(groupId, id);
             if (!nickname) return null;
             return nickname;
         });
+        chartData = chartData.sort((a, b) => b.value - a.value);
+        // @ts-ignore Will change next time
+        chartData[0].itemStyle = {
+            color: "#fff176",
+        };
         chart.setData(chartData);
         chart.setTitle(
             `${await this.bot.getGroupName(groupId)} 的${this.rangeName}消息`,
