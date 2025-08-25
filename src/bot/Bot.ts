@@ -1,7 +1,8 @@
 import { NCWebsocket, Structs, type SendMessageSegment } from "node-napcat-ts";
 import { env } from "../Env.js";
-import { StatisticListener } from "./StatisticListener.js";
-import { CommandListener } from "./CommandListener.js";
+import { StatisticListener } from "./event/StatisticListener.js";
+import { CommandListener } from "./event/CommandListener.js";
+import { MessageSender } from "./MessageSender.js";
 
 /**
  * { groupId : { userId : nickname } }
@@ -10,6 +11,8 @@ export type GroupNicknameCache = Record<number, Record<number, string>>;
 
 export class Bot {
     bot: NCWebsocket;
+    messageSender: MessageSender;
+
     selfId = 0;
 
     groupNicknameCache: GroupNicknameCache = {};
@@ -30,6 +33,7 @@ export class Bot {
             },
             false,
         );
+        this.messageSender = new MessageSender(this.bot);
     }
 
     init() {
@@ -38,6 +42,8 @@ export class Bot {
             .then(async () => {
                 const loginInfo = await this.bot.get_login_info();
                 this.selfId = loginInfo.user_id;
+                
+                this.messageSender.startPolling();
             })
             .catch((err) => {
                 console.error(err);
@@ -73,5 +79,10 @@ export class Bot {
             }
         }
         return this.groupNicknameCache[groupId][userId];
+    }
+
+    async getGroupName(groupId: number) {
+        const group = await this.bot.get_group_info({ group_id: groupId });
+        return group.group_name;
     }
 }

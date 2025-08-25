@@ -1,13 +1,13 @@
 import { Structs, type GroupMessage } from "node-napcat-ts";
 import { BotEventListener } from "./BotEventListener.js";
-import { CommandManager } from "./command/CommandManager.js";
-import type { Bot } from "./Bot.js";
-import { HelpCommand } from "./command/HelpCommand.js";
+import { CommandManager } from "../command/CommandManager.js";
+import type { Bot } from "../Bot.js";
+import { HelpCommand } from "../command/HelpCommand.js";
 import {
     DayStatisticCommand,
     MonthStatisticCommand,
     YearStatisticCommand,
-} from "./command/StatisticCommand.js";
+} from "../command/StatisticCommand.js";
 
 export class CommandListener extends BotEventListener {
     groupCommandManager = new CommandManager();
@@ -39,10 +39,10 @@ export class CommandListener extends BotEventListener {
             _0message.type == "at" &&
             _0message.data.qq == this.bot.selfId.toString()
         ) {
-            return this.bot.bot.send_group_msg({
-                group_id: ctx.group_id,
-                message: this.bot.getHelpMessage(),
-            });
+            return this.bot.messageSender.sendGroupMsg(
+                ctx.group_id,
+                this.bot.getHelpMessage(),
+            );
         }
 
         if (_0message.type != "text") return;

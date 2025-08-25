@@ -6,6 +6,7 @@ import { MessageCountPieChart } from "../../image/MessageCountChart.js";
 import { safeParseInt } from "../../util.js";
 
 class StatisticCommand extends CommandBase {
+    rangeName = "";
     getTimeRange(args: string[]): { startTime: HourTime; endTime: HourTime } {
         return {
             startTime: new HourTime(0, 0, 0, 0),
@@ -14,13 +15,10 @@ class StatisticCommand extends CommandBase {
     }
 
     async execute(groupId: number, senderId: number, args: string[]) {
-        this.bot.bot.send_group_msg({
-            group_id: groupId,
-            message: [
-                Structs.at(senderId),
-                Structs.text(" ✏️喵喵绘制中 (test)"),
-            ],
-        });
+        this.bot.messageSender.sendGroupMsg(groupId, [
+            Structs.at(senderId),
+            Structs.text(" ✏️喵喵绘制中 (test)"),
+        ]);
 
         const { startTime, endTime } = this.getTimeRange(args);
 
@@ -36,11 +34,13 @@ class StatisticCommand extends CommandBase {
             return nickname;
         });
         chart.setData(chartData);
+        chart.setTitle(
+            `${await this.bot.getGroupName(groupId)} 的${this.rangeName}消息`,
+        );
 
-        this.bot.bot.send_group_msg({
-            group_id: groupId,
-            message: [Structs.image(chart.toDataUrl())],
-        });
+        this.bot.messageSender.sendGroupMsg(groupId, [
+            Structs.image(chart.toDataUrl()),
+        ]);
     }
 }
 
@@ -50,6 +50,8 @@ export class DayStatisticCommand extends StatisticCommand {
     usage = "日统计";
     id = "#日统计";
     alias = ["日统计"];
+
+    rangeName = "本日";
 
     getTimeRange(args: string[]): { startTime: HourTime; endTime: HourTime } {
         const now = HourTime.fromCurrentTime();
@@ -67,6 +69,8 @@ export class MonthStatisticCommand extends StatisticCommand {
     id = "#月统计";
     alias = ["月统计"];
 
+    rangeName = "本月";
+
     getTimeRange(args: string[]): { startTime: HourTime; endTime: HourTime } {
         const now = HourTime.fromCurrentTime();
         return {
@@ -82,6 +86,8 @@ export class YearStatisticCommand extends StatisticCommand {
     usage = "年统计";
     id = "#年统计";
     alias = ["年统计"];
+
+    rangeName = "本年";
 
     getTimeRange(args: string[]): { startTime: HourTime; endTime: HourTime } {
         const now = HourTime.fromCurrentTime();

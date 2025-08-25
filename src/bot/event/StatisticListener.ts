@@ -1,6 +1,6 @@
 import type { GroupMessage } from "node-napcat-ts";
-import { Bot } from "./Bot.js";
-import { MessageTable } from "../db/Message.js";
+import { Bot } from "../Bot.js";
+import { MessageTable } from "../../db/Message.js";
 import { BotEventListener } from "./BotEventListener.js";
 
 export class StatisticListener extends BotEventListener {

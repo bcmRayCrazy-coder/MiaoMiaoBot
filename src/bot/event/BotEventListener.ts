@@ -1,4 +1,4 @@
-import type { Bot } from "./Bot.js";
+import type { Bot } from "../Bot.js";
 
 export class BotEventListener {
     bot: Bot;
