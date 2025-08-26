@@ -47,7 +47,7 @@ export class CommandManager {
 
                     if (!noAlias) {
                         list.push(command);
-                        break;
+                        break addToList;
                     }
                     if (typeof command == "string") break;
                     list.push(command);

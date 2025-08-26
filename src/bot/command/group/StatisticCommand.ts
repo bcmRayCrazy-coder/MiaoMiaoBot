@@ -1,9 +1,9 @@
 import { Structs } from "node-napcat-ts";
-import { CommandBase } from "./CommandBase.js";
-import { HourTime } from "../../Time.js";
-import { MessageCount } from "../../db/Message.js";
-import { MessageCountPieChart } from "../../image/MessageCountChart.js";
-import { safeParseInt, sortRecord } from "../../util.js";
+import { CommandBase } from "../CommandBase.js";
+import { HourTime } from "../../../Time.js";
+import { MessageCount } from "../../../db/Message.js";
+import { MessageCountPieChart } from "../../../image/MessageCountChart.js";
+import { safeParseInt, sortRecord } from "../../../util.js";
 
 class StatisticCommand extends CommandBase {
     rangeName = "";

@@ -1,8 +1,10 @@
 import { NCWebsocket, Structs, type SendMessageSegment } from "node-napcat-ts";
 import { env } from "../Env.js";
 import { StatisticListener } from "./event/StatisticListener.js";
-import { CommandListener } from "./event/CommandListener.js";
+import { CommandListener } from "./event/GroupCommandListener.js";
 import { MessageSender } from "./MessageSender.js";
+import { GroupTable } from "../db/Group.js";
+import { ActivateListener } from "./event/ActivateListener.js";
 
 /**
  * { groupId : { userId : nickname } }
@@ -56,7 +58,16 @@ export class Bot {
 
     listen() {
         new StatisticListener(this).listen();
+        new ActivateListener(this).listen();
         new CommandListener(this).listen();
+    }
+
+    sendToAdmin(message: SendMessageSegment[] | string) {
+        if (typeof message == "string")
+            this.messageSender.sendPrivateMsg(env.bot.admin, [
+                Structs.text(message),
+            ]);
+        else this.messageSender.sendPrivateMsg(env.bot.admin, message);
     }
 
     async getGroupNickname(groupId: number, userId: number) {
@@ -80,5 +91,11 @@ export class Bot {
     async getGroupName(groupId: number) {
         const group = await this.bot.get_group_info({ group_id: groupId });
         return group.group_name;
+    }
+
+    async getIsActivate(groupId: number) {
+        const group = await GroupTable.selectGroup({ groupId });
+        if (!group) return false;
+        return group.active && !group.banned;
     }
 }

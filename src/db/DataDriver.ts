@@ -1,21 +1,3 @@
-type KeyValue<TKey, TValue> = {
-    key: TKey;
-    value: TValue;
-};
-
-function defaultParseArray<T extends string | number | symbol, D>(
-    data: Record<T, D>,
-) {
-    var result: KeyValue<T, D>[] = [];
-    for (const key in data) {
-        if (Object.prototype.hasOwnProperty.call(data, key)) {
-            const value = data[key];
-            result.push({ key, value });
-        }
-    }
-    return result;
-}
-
 export class DataDriver {
     data: Record<any, any> = {};
     constructor() {}

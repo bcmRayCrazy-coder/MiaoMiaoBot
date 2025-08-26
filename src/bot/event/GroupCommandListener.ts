@@ -7,7 +7,7 @@ import {
     DayStatisticCommand,
     MonthStatisticCommand,
     YearStatisticCommand,
-} from "../command/StatisticCommand.js";
+} from "../command/group/StatisticCommand.js";
 import { InfoCommand } from "../command/InfoCommand.js";
 import HelpMessage from "../message/HelpMessage.js";
 
@@ -29,12 +29,15 @@ export class CommandListener extends BotEventListener {
     registerCommands() {
         this.groupCommandManager.register(new HelpCommand(this.bot));
         this.groupCommandManager.register(new InfoCommand(this.bot));
+
         this.groupCommandManager.register(new DayStatisticCommand(this.bot));
         this.groupCommandManager.register(new MonthStatisticCommand(this.bot));
         this.groupCommandManager.register(new YearStatisticCommand(this.bot));
     }
 
-    onGroupMessage(ctx: GroupMessage) {
+    async onGroupMessage(ctx: GroupMessage) {
+        if (!this.bot.getIsActivate(ctx.group_id)) return;
+
         const _0message = ctx.message[0];
         if (!_0message) return;
 
