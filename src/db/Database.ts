@@ -23,11 +23,11 @@ export class Database {
         if (!Database.connection)
             return console.error(chalk.red("Db not connected"));
 
-        this.createTable(VersionTable);
+        this.createTable(VersionTable).then(() =>
+            VersionTable.setVersion(new Version(2, 0)),
+        );
         this.createTable(MessageTable);
         this.createTable(GroupTable);
-
-        VersionTable.setVersion(new Version(2, 0));
     }
 
     async createTable(table: any) {
