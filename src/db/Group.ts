@@ -96,4 +96,16 @@ export class GroupTable {
 
         await Database.connection(this.tableName).where(data).delete();
     }
+
+    static async getActivateGroupList() {
+        if (!Database.connection)
+            return console.error("Database connection not created");
+
+        return (
+            await Database.connection(this.tableName).select("*").where({
+                active: true,
+                banned: false,
+            })
+        ).map((value) => Group.parseJSON(value));
+    }
 }

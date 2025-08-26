@@ -1,10 +1,11 @@
 import { NCWebsocket, Structs, type SendMessageSegment } from "node-napcat-ts";
 import { env } from "../Env.js";
 import { StatisticListener } from "./event/StatisticListener.js";
-import { CommandListener } from "./event/GroupCommandListener.js";
+import { GroupCommandListener } from "./event/GroupCommandListener.js";
 import { MessageSender } from "./MessageSender.js";
 import { GroupTable } from "../db/Group.js";
 import { ActivateListener } from "./event/ActivateListener.js";
+import { PrivateCommandListener } from "./event/PrivateCommandListener.js";
 
 /**
  * { groupId : { userId : nickname } }
@@ -59,7 +60,9 @@ export class Bot {
     listen() {
         new StatisticListener(this).listen();
         new ActivateListener(this).listen();
-        new CommandListener(this).listen();
+
+        new GroupCommandListener(this).listen();
+        new PrivateCommandListener(this).listen();
     }
 
     sendToAdmin(message: SendMessageSegment[] | string) {

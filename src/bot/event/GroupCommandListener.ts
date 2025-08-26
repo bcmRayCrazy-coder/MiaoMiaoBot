@@ -11,7 +11,7 @@ import {
 import { InfoCommand } from "../command/InfoCommand.js";
 import HelpMessage from "../message/HelpMessage.js";
 
-export class CommandListener extends BotEventListener {
+export class GroupCommandListener extends BotEventListener {
     groupCommandManager = new CommandManager();
 
     constructor(bot: Bot) {
