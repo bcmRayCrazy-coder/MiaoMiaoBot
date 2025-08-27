@@ -4,6 +4,7 @@ import { CommandManager } from "../command/CommandManager.js";
 import type { Bot } from "../Bot.js";
 import { env } from "../../Env.js";
 import { BroadcastCommand } from "../command/admin/BroadcastCommand.js";
+import { BanGroupCommand } from "../command/admin/BanCommand.js";
 
 export class PrivateCommandListener extends BotEventListener {
     privateCommandManager = new CommandManager();
@@ -16,13 +17,15 @@ export class PrivateCommandListener extends BotEventListener {
     }
 
     listen() {
-        this.bot.bot.on("message.private.friend", (ctx) => {
-            this.onPrivateMessage(ctx);
-        });
+        this.bot.bot.on(
+            "message.private.friend",
+            this.onPrivateMessage.bind(this),
+        );
     }
 
     registerCommands() {
         this.adminCommandManager.register(new BroadcastCommand(this.bot));
+        this.adminCommandManager.register(new BanGroupCommand(this.bot));
     }
 
     async onPrivateMessage(ctx: PrivateFriendMessage) {

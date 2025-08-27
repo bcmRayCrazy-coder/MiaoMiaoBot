@@ -3,9 +3,9 @@ import { GroupTable } from "../../../db/Group.js";
 import { CommandBase } from "../CommandBase.js";
 
 export class BroadcastCommand extends CommandBase {
-    name = "喵喵广播";
+    name = "群广播";
     description = "向所有激活群里发送广播.";
-    usage = "/gb <arg>";
+    usage = "/gb <消息>";
     id = "/gb";
     alias = [];
 

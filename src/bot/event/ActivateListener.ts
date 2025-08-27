@@ -11,8 +11,8 @@ export class ActivateListener extends BotEventListener {
             if (!!group) return;
             await GroupTable.addGroup(Group.defaultGroup(ctx.group_id));
 
-            this.bot.messageSender.sendGroupMsg(ctx.group_id, HelpMessage);
-            this.bot.sendToAdmin(`Auto activate at group ${ctx.group_id}`);
+            // this.bot.messageSender.sendGroupMsg(ctx.group_id, HelpMessage);
+            // this.bot.sendToAdmin(`Auto activate at group ${ctx.group_id}`);
         });
     }
 }

@@ -17,7 +17,7 @@ class StatisticCommand extends CommandBase {
     async execute(groupId: number, senderId: number, args: string[]) {
         this.bot.messageSender.sendGroupMsg(groupId, [
             Structs.at(senderId),
-            Structs.text(" ✏️喵喵绘制中 (test)"),
+            Structs.text(" ✏️ 喵喵绘制中"),
         ]);
 
         const { startTime, endTime } = this.getTimeRange(args);

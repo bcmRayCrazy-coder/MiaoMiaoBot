@@ -67,10 +67,12 @@ export class Bot {
 
     sendToAdmin(message: SendMessageSegment[] | string) {
         if (typeof message == "string")
-            this.messageSender.sendPrivateMsg(env.bot.admin, [
-                Structs.text(message),
-            ]);
-        else this.messageSender.sendPrivateMsg(env.bot.admin, message);
+            this.messageSender.sendPrivateMsg(
+                env.bot.admin,
+                [Structs.text(message)],
+                true,
+            );
+        else this.messageSender.sendPrivateMsg(env.bot.admin, message, true);
     }
 
     async getGroupNickname(groupId: number, userId: number) {

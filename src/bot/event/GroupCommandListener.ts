@@ -21,9 +21,7 @@ export class GroupCommandListener extends BotEventListener {
     }
 
     listen() {
-        this.bot.bot.on("message.group", (ctx) => {
-            this.onGroupMessage(ctx);
-        });
+        this.bot.bot.on("message.group", this.onGroupMessage.bind(this));
     }
 
     registerCommands() {
@@ -36,7 +34,7 @@ export class GroupCommandListener extends BotEventListener {
     }
 
     async onGroupMessage(ctx: GroupMessage) {
-        if (!this.bot.getIsActivate(ctx.group_id)) return;
+        if (!await this.bot.getIsActivate(ctx.group_id)) return;
 
         const _0message = ctx.message[0];
         if (!_0message) return;

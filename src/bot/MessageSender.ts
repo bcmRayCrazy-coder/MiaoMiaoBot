@@ -56,10 +56,17 @@ export class MessageSender {
         );
     }
 
-    sendPrivateMsg(userId: number, message: SendMessageSegment[]) {
-        this.messagePool.push(
-            ScheduledMessage.createPrivateMessage(userId, message),
+    sendPrivateMsg(
+        userId: number,
+        message: SendMessageSegment[],
+        first = false,
+    ) {
+        const scheduledMessage = ScheduledMessage.createPrivateMessage(
+            userId,
+            message,
         );
+        if (first) this.messagePool.unshift(scheduledMessage);
+        else this.messagePool.push(scheduledMessage);
     }
 
     startPolling() {

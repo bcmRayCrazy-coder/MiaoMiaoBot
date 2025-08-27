@@ -5,9 +5,7 @@ import { BotEventListener } from "./BotEventListener.js";
 
 export class StatisticListener extends BotEventListener {
     listen() {
-        this.bot.bot.on("message.group", (ctx) => {
-            this.onGroupMessage(ctx);
-        });
+        this.bot.bot.on("message.group", this.onGroupMessage.bind(this));
     }
 
     onGroupMessage(ctx: GroupMessage) {
