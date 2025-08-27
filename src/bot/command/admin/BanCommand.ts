@@ -1,5 +1,5 @@
 import { Structs } from "node-napcat-ts";
-import { CommandBase } from "../CommandBase.js";
+import { CommandBase, type CommandArgs } from "../CommandBase.js";
 import { GroupTable } from "../../../db/Group.js";
 
 export class BanGroupCommand extends CommandBase {
@@ -9,8 +9,8 @@ export class BanGroupCommand extends CommandBase {
     id = "/ban";
     alias = [];
 
-    async execute(groupId: number, senderId: number, args: string[]) {
-        if (!args[0])
+    async execute(groupId: number, senderId: number, args: CommandArgs) {
+        if (!args[0] || typeof args[0] != 'string')
             return this.bot.messageSender.sendPrivateMsg(senderId, [
                 Structs.text(this.usage),
             ]);

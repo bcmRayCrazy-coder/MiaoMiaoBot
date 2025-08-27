@@ -1,4 +1,4 @@
-import type { CommandBase } from "./CommandBase.js";
+import type { CommandArgs, CommandBase } from "./CommandBase.js";
 
 /**
  * CommandBase: 需要调用的指令
@@ -21,7 +21,7 @@ export class CommandManager {
 
     execute(
         commandId: string,
-        args: string[],
+        args: CommandArgs,
         groupId: number,
         senderId: number,
     ): void {

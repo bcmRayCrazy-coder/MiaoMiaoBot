@@ -79,6 +79,64 @@ export class MessageCount extends DataDriver {
     }
 }
 
+export class MessageTrend extends DataDriver {
+    groupId: number;
+    userId: number;
+    startTime: HourTime;
+    endTime: HourTime;
+    timeInterval: HourTime;
+
+    /**
+     * { timestamp: count }
+     */
+    data: Record<number, number> = {};
+
+    constructor(
+        groupId: number,
+        userId: number,
+        startTime: HourTime,
+        endTime: HourTime,
+        timeInterval: HourTime,
+    ) {
+        super();
+        this.groupId = groupId;
+        this.userId = userId;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.timeInterval = timeInterval;
+    }
+
+    async fetch() {
+        const rawData: Message[] =
+            (await MessageTable.selectMessageByTimeRange(
+                { groupId: this.groupId, userId: this.userId },
+                this.startTime,
+                this.endTime,
+            )) || [];
+        rawData.forEach((message) => {
+            const time =
+                Math.floor(
+                    message.time.toTimestamp() /
+                        this.timeInterval.toTimestamp(),
+                ) * this.timeInterval.toTimestamp();
+
+            if (!this.data[time]) this.data[time] = 0;
+            this.data[time] += message.count;
+        });
+    }
+
+    toLineChartData() {
+        var result: number[] = [];
+        var currentTime = this.startTime.toTimestamp();
+        while (currentTime <= this.endTime.toTimestamp()) {
+            const value = this.data[currentTime] || 0;
+            result.push(value);
+            currentTime += this.timeInterval.toTimestamp();
+        }
+        return result;
+    }
+}
+
 export class MessageTable {
     static tableName = "message";
 

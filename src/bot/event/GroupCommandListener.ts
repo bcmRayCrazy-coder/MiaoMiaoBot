@@ -4,12 +4,14 @@ import { CommandManager } from "../command/CommandManager.js";
 import type { Bot } from "../Bot.js";
 import { HelpCommand } from "../command/HelpCommand.js";
 import {
-    DayStatisticCommand,
-    MonthStatisticCommand,
-    YearStatisticCommand,
-} from "../command/group/StatisticCommand.js";
+    DayCountCommand,
+    MonthCountCommand,
+    YearCountCommand,
+} from "../command/group/CountCommand.js";
 import { InfoCommand } from "../command/InfoCommand.js";
 import HelpMessage from "../message/HelpMessage.js";
+import { DayTrendCommand, MonthTrendCommand } from "../command/group/TrendCommand.js";
+import type { CommandArgs } from "../command/CommandBase.js";
 
 export class GroupCommandListener extends BotEventListener {
     groupCommandManager = new CommandManager();
@@ -28,13 +30,16 @@ export class GroupCommandListener extends BotEventListener {
         this.groupCommandManager.register(new HelpCommand(this.bot));
         this.groupCommandManager.register(new InfoCommand(this.bot));
 
-        this.groupCommandManager.register(new DayStatisticCommand(this.bot));
-        this.groupCommandManager.register(new MonthStatisticCommand(this.bot));
-        this.groupCommandManager.register(new YearStatisticCommand(this.bot));
+        this.groupCommandManager.register(new DayCountCommand(this.bot));
+        this.groupCommandManager.register(new MonthCountCommand(this.bot));
+        this.groupCommandManager.register(new YearCountCommand(this.bot));
+
+        this.groupCommandManager.register(new DayTrendCommand(this.bot));
+        this.groupCommandManager.register(new MonthTrendCommand(this.bot));
     }
 
     async onGroupMessage(ctx: GroupMessage) {
-        if (!await this.bot.getIsActivate(ctx.group_id)) return;
+        if (!(await this.bot.getIsActivate(ctx.group_id))) return;
 
         const _0message = ctx.message[0];
         if (!_0message) return;
@@ -50,7 +55,8 @@ export class GroupCommandListener extends BotEventListener {
         if (_0message.type != "text") return;
 
         const _msg = _0message.data.text.split(" ");
-        const args = _msg.slice(1);
+        const args: CommandArgs = _msg.slice(1);
+        args.push(...ctx.message.slice(1));
 
         if (!_msg[0] || _msg[0].length >= 7) return;
 

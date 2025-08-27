@@ -1,8 +1,13 @@
+import type { HourTime } from "../Time.js";
+
+export type KeyValue = { key: string; value: any };
+
 export class DataDriver {
     data: Record<any, any> = {};
     constructor() {}
     async fetch() {}
-    async toChartData(getName: (id: any) => Promise<string | null>) {
+
+    async toPieChartData(getName: (id: any) => Promise<string | null>) {
         var result: { name: string; value: any }[] = [];
         for (const key in this.data) {
             if (Object.prototype.hasOwnProperty.call(this.data, key)) {

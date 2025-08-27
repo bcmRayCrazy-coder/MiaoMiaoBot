@@ -35,6 +35,13 @@ export class HourTime {
         return Date.UTC(this.year, this.month, this.day, this.hour, 0, 0, 0);
     }
 
+    add(time: HourTime) {
+        this.year += time.year;
+        this.month += time.month;
+        this.day += time.day;
+        this.hour += time.hour;
+    }
+
     static fromTimestamp(time: number) {
         const date = new Date(time);
         return new HourTime(
