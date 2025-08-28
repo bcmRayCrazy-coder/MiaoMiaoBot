@@ -71,7 +71,10 @@ class TrendCommand extends CommandBase {
 
         const chart = new MessageTrendStackChart(650, 400, 12);
         chart.setAxis(timeList);
-        chart.setTitle("啊阿啊我是标题 趋势啊阿啊");
+        chart.setTitle(
+            `${await this.bot.getGroupName(groupId)} 的${this.rangeName}趋势`,
+            "堆叠折线图",
+        );
         chart.setData(trendSeries);
         this.bot.messageSender.sendGroupMsg(groupId, [
             Structs.image(chart.toDataUrl()),
@@ -98,7 +101,7 @@ export class DayTrendCommand extends TrendCommand {
     }
 
     getTimeName(time: HourTime): string {
-        return `${time.hour}h`
+        return `${time.hour}h`;
     }
 }
 export class MonthTrendCommand extends TrendCommand {
@@ -117,5 +120,9 @@ export class MonthTrendCommand extends TrendCommand {
             startTime: new HourTime(now.year, now.month, 0, 0),
             endTime: new HourTime(now.year, now.month, 31, 23),
         };
+    }
+
+    getTimeName(time: HourTime): string {
+        return `${time.day}日`;
     }
 }

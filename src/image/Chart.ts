@@ -37,7 +37,7 @@ export class Chart {
         });
     }
 
-    setTitle(title: string) {
+    setTitle(title: string, subText = "数据来源 喵喵") {
         this.chart.setOption({
             title: {
                 text: title,
