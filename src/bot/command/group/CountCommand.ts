@@ -7,7 +7,10 @@ import { safeParseInt, sortRecord } from "../../../util.js";
 
 class CountCommand extends CommandBase {
     rangeName = "";
-    getTimeRange(args: CommandArgs): { startTime: HourTime; endTime: HourTime } {
+    getTimeRange(args: CommandArgs): {
+        startTime: HourTime;
+        endTime: HourTime;
+    } {
         return {
             startTime: new HourTime(0, 0, 0, 0),
             endTime: new HourTime(0, 0, 0, 0),
@@ -21,15 +24,13 @@ class CountCommand extends CommandBase {
         const chart = new MessageCountPieChart(650, 400, 12);
 
         await messageCount.fetch();
-        var chartData = await messageCount.toPieChartData(
-            async (_id) => {
-                const id = safeParseInt(_id);
-                if (!id) return null;
-                const nickname = await this.bot.getGroupNickname(groupId, id);
-                if (!nickname) return null;
-                return nickname;
-            },
-        );
+        var chartData = await messageCount.toPieChartData(async (_id) => {
+            const id = safeParseInt(_id);
+            if (!id) return null;
+            const nickname = await this.bot.getGroupNickname(groupId, id);
+            if (!nickname) return null;
+            return nickname;
+        });
         chartData = chartData.sort((a, b) => b.value - a.value);
         chart.setData(chartData);
         chart.setTitle(

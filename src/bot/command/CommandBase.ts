@@ -1,7 +1,7 @@
 import type { Receive } from "node-napcat-ts";
 import type { Bot } from "../Bot.js";
 
-export type CommandArgs = (string|Receive[keyof Receive])[]
+export type CommandArgs = (string | Receive[keyof Receive])[];
 
 export class CommandBase {
     name = "My Command";

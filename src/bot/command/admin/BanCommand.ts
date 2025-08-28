@@ -10,7 +10,7 @@ export class BanGroupCommand extends CommandBase {
     alias = [];
 
     async execute(groupId: number, senderId: number, args: CommandArgs) {
-        if (!args[0] || typeof args[0] != 'string')
+        if (!args[0] || typeof args[0] != "string")
             return this.bot.messageSender.sendPrivateMsg(senderId, [
                 Structs.text(this.usage),
             ]);

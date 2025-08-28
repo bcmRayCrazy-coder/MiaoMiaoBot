@@ -10,7 +10,10 @@ import {
 } from "../command/group/CountCommand.js";
 import { InfoCommand } from "../command/InfoCommand.js";
 import HelpMessage from "../message/HelpMessage.js";
-import { DayTrendCommand, MonthTrendCommand } from "../command/group/TrendCommand.js";
+import {
+    DayTrendCommand,
+    MonthTrendCommand,
+} from "../command/group/TrendCommand.js";
 import type { CommandArgs } from "../command/CommandBase.js";
 
 export class GroupCommandListener extends BotEventListener {
