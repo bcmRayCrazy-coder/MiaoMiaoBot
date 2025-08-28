@@ -41,7 +41,7 @@ export class Chart {
         this.chart.setOption({
             title: {
                 text: title,
-                subtext: "数据来源 喵喵",
+                subtext: subText,
                 left: "center",
             },
         });

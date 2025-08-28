@@ -58,8 +58,7 @@ export class GroupCommandListener extends BotEventListener {
         if (_0message.type != "text") return;
 
         const _msg = _0message.data.text.split(" ");
-        const args: CommandArgs = _msg.slice(1);
-        args.push(...ctx.message.slice(1));
+        const args = CommandManager.parseArgs(ctx.message);
 
         if (!_msg[0] || _msg[0].length >= 7) return;
 

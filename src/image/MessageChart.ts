@@ -23,11 +23,17 @@ export type MessageTrendStackSeries = {
 };
 
 export class MessageTrendStackChart extends Chart {
+    stack = false;
+
     setAxis(xAxisData: string[]) {
         this.chart.setOption({
             xAxis: [{ type: "category", data: xAxisData }],
             yAxis: {},
         });
+    }
+
+    setStack(stack: boolean) {
+        this.stack = stack;
     }
 
     setData(series: MessageTrendStackSeries[]) {
@@ -37,7 +43,7 @@ export class MessageTrendStackChart extends Chart {
                     name,
                     data,
                     type: "line",
-                    stack: "Total",
+                    stack: this.stack ? "Total" : null,
                     smooth: true,
                     areaStyle: {},
                 };

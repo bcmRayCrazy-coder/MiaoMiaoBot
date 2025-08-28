@@ -1,5 +1,5 @@
 import { Structs } from "node-napcat-ts";
-import { MessageTrend } from "../../../db/Message.js";
+import { MessageCount, MessageTrend } from "../../../db/Message.js";
 import {
     MessageTrendStackChart,
     type MessageTrendStackSeries,
@@ -21,24 +21,71 @@ class TrendCommand extends CommandBase {
     }
 
     getTimeName(time: HourTime) {
-        return `${time.hour}h`;
+        return time.toString();
+    }
+
+    async getAutoUserIdList(
+        startTime: HourTime,
+        endTime: HourTime,
+        groupId: number,
+    ): Promise<Set<number>> {
+        const messageCount = new MessageCount(groupId, startTime, endTime);
+        await messageCount.fetch();
+
+        const sortableCount: { userId: number; value: number }[] = [];
+        for (const userId in messageCount.data) {
+            if (
+                Object.prototype.hasOwnProperty.call(messageCount.data, userId)
+            ) {
+                const value = messageCount.data[userId];
+                if (value)
+                    sortableCount.push({ userId: parseInt(userId), value });
+            }
+        }
+
+        const userIdList = new Set<number>();
+        sortableCount
+            .sort((a, b) => b.value - a.value)
+            .slice(0, 12)
+            .forEach(({ userId }) => {
+                userIdList.add(userId);
+            });
+        return userIdList;
+    }
+
+    addToUserIdList(list: Set<number>, content: string) {
+        var userId = parseInt(content);
+        if (!isNaN(userId)) list.add(userId);
     }
 
     async execute(groupId: number, senderId: number, args: CommandArgs) {
         const { startTime, endTime } = this.getTimeRange(args);
 
-        const userIdList = [senderId];
-        args.forEach((val) => {
-            if (typeof val == "object" && val.type == "at") {
-                var userId = parseInt(val.data.qq);
-                if (!isNaN(userId)) userIdList.push(userId);
-            }
-        });
+        var userIdList = new Set<number>();
+        var useStack = false;
+
+        if (args.includes("自动")) {
+            userIdList = await this.getAutoUserIdList(
+                startTime,
+                endTime,
+                groupId,
+            );
+        } else {
+            args.forEach((val) => {
+                if (typeof val == "object" && val.type == "at")
+                    this.addToUserIdList(userIdList, val.data.qq);
+                else if (typeof val == "string")
+                    this.addToUserIdList(userIdList, val);
+            });
+        }
+        useStack = args.includes("堆叠");
+
+        userIdList.add(senderId);
 
         const trendSeries: MessageTrendStackSeries[] = [];
-        for (let i = 0; i < userIdList.length; i++) {
+
+        for (let userId of userIdList) {
             addTrendSeries: {
-                const userId = userIdList[i];
                 if (!userId) break addTrendSeries;
 
                 const messageTrend = new MessageTrend(
@@ -71,9 +118,10 @@ class TrendCommand extends CommandBase {
 
         const chart = new MessageTrendStackChart(650, 400, 12);
         chart.setAxis(timeList);
+        chart.setStack(useStack);
         chart.setTitle(
             `${await this.bot.getGroupName(groupId)} 的${this.rangeName}趋势`,
-            "堆叠折线图",
+            `${useStack ? "堆叠" : ""}折线图 - 数据来源 喵喵`,
         );
         chart.setData(trendSeries);
         this.bot.messageSender.sendGroupMsg(groupId, [
@@ -103,6 +151,14 @@ export class DayTrendCommand extends TrendCommand {
     getTimeName(time: HourTime): string {
         return `${time.hour}h`;
     }
+
+    // async getAutoUserIdList(
+    //     startTime: HourTime,
+    //     endTime: HourTime,
+    //     groupId: number,
+    // ): Promise<Set<number>> {
+
+    // }
 }
 export class MonthTrendCommand extends TrendCommand {
     name = "月趋势";

@@ -1,3 +1,4 @@
+import type { Receive } from "node-napcat-ts";
 import type { CommandArgs, CommandBase } from "./CommandBase.js";
 
 /**
@@ -54,5 +55,22 @@ export class CommandManager {
                 }
             }
         }
+    }
+
+    static parseArgs(raw: Receive[keyof Receive][]) {
+        const args: CommandArgs = [];
+        for (let i = 0; i < raw.length; i++) {
+            addToArgs: {
+                let arg = raw[i];
+                if (!arg) break addToArgs;
+                if (arg.type == "text") args.push(...arg.data.text.split(" "));
+                else args.push(arg);
+            }
+        }
+        return args.filter((val, id) => {
+            if (id == 0) return false;
+            if (typeof val == "string") return val.trim().length > 0;
+            return true;
+        });
     }
 }
