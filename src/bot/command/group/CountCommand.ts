@@ -31,10 +31,10 @@ class CountCommand extends CommandBase {
             if (!nickname) return null;
             return nickname;
         });
-        chartData = chartData.sort((a, b) => b.value - a.value);
+        chartData = chartData.sort((a, b) => a.value - b.value);
         chart.setData(chartData);
         chart.setTitle(
-            `${await this.bot.getGroupName(groupId)} 的${this.rangeName}消息`,
+            `${await this.bot.getGroupName(groupId)} 的${this.rangeName}消息数量`,
         );
 
         this.bot.messageSender.sendGroupMsg(groupId, [

@@ -7,6 +7,6 @@ Github仓库 bcmRayCrazy-coder/MiaoMiaoBot
 
 📝 更新日志
 2025/8
-重构了喵喵
+重构了喵喵, 更新至v2
 创建了喵喵v1`),
 ];
