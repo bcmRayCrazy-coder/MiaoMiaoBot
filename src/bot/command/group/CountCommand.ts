@@ -23,6 +23,12 @@ class CountCommand extends CommandBase {
         const messageCount = new MessageCount(groupId, startTime, endTime);
         const chart = new MessageCountPieChart(650, 400, 12);
 
+        var dataLength = 12;
+        if(args[0] && typeof(args[0]) == 'string'){
+            const num = parseInt(args[0]);
+            if(!isNaN(num)) dataLength = num;
+        }
+
         await messageCount.fetch();
         var chartData = await messageCount.toPieChartData(async (_id) => {
             const id = safeParseInt(_id);
@@ -31,7 +37,7 @@ class CountCommand extends CommandBase {
             if (!nickname) return null;
             return nickname;
         });
-        chartData = chartData.sort((a, b) => a.value - b.value);
+        chartData = chartData.sort((a, b) => b.value - a.value).slice(0, dataLength);
         chart.setData(chartData);
         chart.setTitle(
             `${await this.bot.getGroupName(groupId)} 的${this.rangeName}消息数量`,
