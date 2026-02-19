@@ -12,6 +12,11 @@ export interface EnvBotConfig {
     admin: number;
 }
 
+export interface EnvWebConfig {
+    port: number;
+    token: string;
+}
+
 class Env {
     envType: string = process.env.ENV_TYPE || "";
     napcat: EnvNapcatConfig = {
@@ -22,6 +27,10 @@ class Env {
     };
     bot: EnvBotConfig = {
         admin: parseInt(process.env.BOT_ADMIN || "0"),
+    };
+    web: EnvWebConfig = {
+        port: parseInt(process.env.WEB_PORT || "7001"),
+        token: process.env.WEB_TOKEN || "",
     };
 
     checkEnv() {

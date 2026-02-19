@@ -2,10 +2,12 @@ import "dotenv/config";
 import { env } from "./Env.js";
 import { Database } from "./db/Database.js";
 import { Bot } from "./bot/Bot.js";
+import { WebStatus } from "./status/WebStatus.js";
 
 class MainApp {
+    webStatus = new WebStatus();
     database = new Database();
-    bot: Bot = new Bot();
+    bot = new Bot();
 
     async main() {
         await this.init();
@@ -13,6 +15,9 @@ class MainApp {
 
     async init() {
         if (!env.checkEnv()) return env.initEnv();
+
+        this.webStatus.init();
+
         this.database.createConnection();
         this.database.initDb();
 
