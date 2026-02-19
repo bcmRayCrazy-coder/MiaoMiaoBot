@@ -29,7 +29,7 @@ class Env {
     }
 
     initEnv() {
-        fs.createReadStream("./.env.template")
+        fs.createReadStream("./.env_template")
             .pipe(fs.createWriteStream("./.env"))
             .on("close", () => {
                 console.warn(chalk.red("Please config .env file first!"));

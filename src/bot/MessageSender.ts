@@ -1,4 +1,5 @@
 import type { NCWebsocket, SendMessageSegment } from "node-napcat-ts";
+import { statusEvents } from "../status/StatusEvents.js";
 
 class ScheduledMessage {
     groupId?: number;
@@ -6,7 +7,10 @@ class ScheduledMessage {
     message?: SendMessageSegment[];
 
     execute(bot: NCWebsocket) {
-        if (!this.message || this.message.length == 0) return;
+        if (!this.message || this.message.length == 0)
+            return new Promise((res, rej) =>
+                rej("No message to send in scheduled message."),
+            );
         if (this.groupId)
             return bot.send_group_msg({
                 group_id: this.groupId,
@@ -17,6 +21,9 @@ class ScheduledMessage {
                 user_id: this.userId,
                 message: this.message,
             });
+        return new Promise((res, rej) =>
+            rej("No message to send in scheduled message."),
+        );
     }
 
     static createPrivateMessage(userId: number, message: SendMessageSegment[]) {
@@ -47,7 +54,11 @@ export class MessageSender {
 
     poll() {
         const message = this.messagePool.shift();
-        if (message) message.execute(this.bot);
+        if (message)
+            message
+                .execute(this.bot)
+                .then(() => statusEvents.emit("bot.sendMsg.success", null))
+                .catch((err) => statusEvents.emit("bot.sendMsg.error", err));
     }
 
     sendGroupMsg(groupId: number, message: SendMessageSegment[]) {

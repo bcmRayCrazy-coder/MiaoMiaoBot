@@ -6,6 +6,8 @@ import { MessageSender } from "./MessageSender.js";
 import { GroupTable } from "../db/Group.js";
 import { ActivateListener } from "./event/ActivateListener.js";
 import { PrivateCommandListener } from "./event/PrivateCommandListener.js";
+import { statusEvents } from "../status/StatusEvents.js";
+import { BotConnectionStatus } from "../status/BotStatusEvents.js";
 
 /**
  * { groupId : { userId : nickname } }
@@ -40,15 +42,18 @@ export class Bot {
     }
 
     init() {
+        statusEvents.emit("bot.connection", BotConnectionStatus.CONNECTING);
         this.bot
             .connect()
             .then(async () => {
+                statusEvents.emit("bot.connection", BotConnectionStatus.OK);
                 const loginInfo = await this.bot.get_login_info();
                 this.selfId = loginInfo.user_id;
 
                 this.messageSender.startPolling();
             })
             .catch((err) => {
+                statusEvents.emit("bot.connection", BotConnectionStatus.FAILED);
                 console.error(err);
             });
 
@@ -58,11 +63,11 @@ export class Bot {
     }
 
     listen() {
-        new StatisticListener(this).listen();
+        // new StatisticListener(this).listen();
         // new ActivateListener(this).listen();
 
-        new GroupCommandListener(this).listen();
-        new PrivateCommandListener(this).listen();
+        // new GroupCommandListener(this).listen();
+        // new PrivateCommandListener(this).listen();
     }
 
     sendToAdmin(message: SendMessageSegment[] | string) {

@@ -1,11 +1,13 @@
 import type { GroupMessage } from "node-napcat-ts";
-import { Bot } from "../Bot.js";
 import { MessageTable } from "../../db/Message.js";
 import { BotEventListener } from "./BotEventListener.js";
 
 export class StatisticListener extends BotEventListener {
     listen() {
         this.bot.bot.on("message.group", this.onGroupMessage.bind(this));
+        // this.bot.bot.on("notice.essence.add",(ctx)=>{
+        //     console.log(ctx);
+        // })
     }
 
     onGroupMessage(ctx: GroupMessage) {

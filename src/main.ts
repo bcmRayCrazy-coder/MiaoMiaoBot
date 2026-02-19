@@ -1,8 +1,6 @@
 import "dotenv/config";
-import chalk from "chalk";
 import { env } from "./Env.js";
 import { Database } from "./db/Database.js";
-import { MessageTable } from "./db/Message.js";
 import { Bot } from "./bot/Bot.js";
 
 class MainApp {
