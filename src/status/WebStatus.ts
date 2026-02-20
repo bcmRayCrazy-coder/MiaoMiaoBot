@@ -33,7 +33,9 @@ export class WebStatus {
         this.listenWeb();
     }
 
-    listenStatus() {}
+    listenStatus() {
+        statusEvents.on('bot.connection', newState => this.botConnectionStatus = newState);
+    }
 
     listenWeb() {
         console.log(
