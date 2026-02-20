@@ -8,6 +8,7 @@ import { ActivateListener } from "./event/ActivateListener.js";
 import { PrivateCommandListener } from "./event/PrivateCommandListener.js";
 import { statusEvents } from "../status/StatusEvents.js";
 import { BotConnectionStatus } from "../status/BotStatusEvents.js";
+import { ReconnectListener } from "./event/ReconnectListener.js";
 
 /**
  * { groupId : { userId : nickname } }
@@ -63,10 +64,11 @@ export class Bot {
     }
 
     listen() {
-        new StatisticListener(this).listen();
-        new ActivateListener(this).listen();
-        new GroupCommandListener(this).listen();
-        new PrivateCommandListener(this).listen();
+        // new StatisticListener(this).listen();
+        // new ActivateListener(this).listen();
+        // new GroupCommandListener(this).listen();
+        // new PrivateCommandListener(this).listen();
+        new ReconnectListener(this).listen();
     }
 
     sendToAdmin(message: SendMessageSegment[] | string) {

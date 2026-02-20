@@ -11,6 +11,7 @@ export class ReconnectListener extends BotEventListener {
     }
 
     onReconnectRequest() {
+        console.log("Reconnect Requested");
         statusEvents.emit("bot.connection", BotConnectionStatus.CONNECTING);
         this.bot.bot
             .reconnect()

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MiaoMiao Bot</title>
+</head>
+
+<body>
+    <div>
+        <p>bot连接状态: </p>
+        <p id="bcs">Fetching</p>
+        <button onclick="refresh_bcs()">刷新</button>
+        <button onclick="fetch_brc()">重新连接</button>
+        <br>
+        <p>bot消息发送状态: </p>
+        <p id="bsm"></p>
+        <button onclick="refresh_bsm()">刷新</button>
+    </div>
+
+    <script>
+        const label_bcs = document.querySelector('#bcs');
+        const label_bsm = document.querySelector('#bsm');
+
+        async function refresh_bcs() {
+            label_bcs.innerText = "Fetching";
+            label_bcs.innerText = await fetch_bcs();
+        }
+
+        async function refresh_bsm() {
+            const data = await fetch_bsm();
+            label_bsm.innerText = `Success: ${data.success} Failed: ${data.failed}`
+        }
+
+        /**
+         *  Bot Connection Status
+         */
+        async function fetch_bcs() {
+            const data = await fetch('./bot_connection_status');
+            return await data.text();
+        }
+
+        /**
+         * Bot Request Connect
+         */
+        async function fetch_brc() {
+            await fetch('./bot_request_connect');
+        }
+
+        /**
+         * Bot Send Msg
+         */
+        async function fetch_bsm() {
+            const data = await fetch('./bot_send_msg');
+            return await data.json();
+        }
+
+        refresh_bcs();
+        refresh_bsm();
+    </script>
+</body>
+
+</html>
