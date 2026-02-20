@@ -33,10 +33,12 @@ export class WebStatus {
         });
 
         this.createShortcut(this.tokenRouter, "bot_send_msg", "bsm");
-        this.tokenRouter.get('/bot_send_msg', (req, res) => res.send({
-            success: this.botSendMsgSuccess,
-            failed: this.botSendMsgFailed
-        }))
+        this.tokenRouter.get("/bot_send_msg", (req, res) =>
+            res.send({
+                success: this.botSendMsgSuccess,
+                failed: this.botSendMsgFailed,
+            }),
+        );
 
         this.app.use(`/${env.web.token}`, this.tokenRouter);
     }
@@ -51,12 +53,15 @@ export class WebStatus {
             "bot.connection",
             (newState) => (this.botConnectionStatus = newState),
         );
-        statusEvents.on('bot.sendMsg.success', () => this.botSendMsgSuccess += 1)
-        statusEvents.on('bot.sendMsg.error', (err) => {
+        statusEvents.on(
+            "bot.sendMsg.success",
+            () => (this.botSendMsgSuccess += 1),
+        );
+        statusEvents.on("bot.sendMsg.error", (err) => {
             console.error(err);
-            console.error('Failed to send a message.');
+            console.error("Failed to send a message.");
             this.botSendMsgFailed += 1;
-        })
+        });
     }
 
     listenWeb() {

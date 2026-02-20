@@ -64,10 +64,10 @@ export class Bot {
     }
 
     listen() {
-        // new StatisticListener(this).listen();
-        // new ActivateListener(this).listen();
-        // new GroupCommandListener(this).listen();
-        // new PrivateCommandListener(this).listen();
+        new StatisticListener(this).listen();
+        new ActivateListener(this).listen();
+        new GroupCommandListener(this).listen();
+        new PrivateCommandListener(this).listen();
         new ReconnectListener(this).listen();
     }
 
