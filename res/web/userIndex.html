@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.5">
+    <title>Miaomiao</title>
+</head>
+
+<body>
+    <h1>喵喵 运行中</h1>
+    <h2>QQ bot状态</h2>
+    <p id="bcs">Fetching</p>
+    <button onclick="refresh_bcs()">刷新</button>
+    <br>
+    <p>&copy;bcmray 2026</p>
+
+    <script>
+        const label_bcs = document.querySelector('#bcs');
+
+        const baseUrl = location.origin;
+
+        async function refresh_bcs() {
+            label_bcs.innerText = "Fetching";
+            label_bcs.innerText = await fetch_bcs();
+        }
+
+        /**
+         *  Bot Connection Status
+         */
+        async function fetch_bcs() {
+            const data = await fetch(baseUrl + '/bot_connection_status');
+            return await data.text();
+        }
+
+        refresh_bcs();
+    </script>
+</body>
+
+</html>

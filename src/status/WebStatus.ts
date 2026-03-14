@@ -14,11 +14,15 @@ export class WebStatus {
 
     constructor() {
         this.app.get("/", (req, res) => {
-            res.send("MiaoMiaoBot Running");
+            res.sendFile(path.resolve("res/web/userIndex.html"));
         });
 
+        this.app.get("/bot_connection_status", (req, res) =>
+            res.send(this.botConnectionStatus),
+        );
+
         this.tokenRouter.get("/", (req, res) =>
-            res.sendFile(path.resolve("res/tokenIndex.html")),
+            res.sendFile(path.resolve("res/web/tokenIndex.html")),
         );
 
         this.createShortcut(this.tokenRouter, "bot_connection_status", "bcs");

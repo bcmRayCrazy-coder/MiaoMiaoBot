@@ -23,6 +23,8 @@
         const label_bcs = document.querySelector('#bcs');
         const label_bsm = document.querySelector('#bsm');
 
+        const baseUrl = location.origin + location.pathname.slice(0, -1)
+
         async function refresh_bcs() {
             label_bcs.innerText = "Fetching";
             label_bcs.innerText = await fetch_bcs();
@@ -37,7 +39,7 @@
          *  Bot Connection Status
          */
         async function fetch_bcs() {
-            const data = await fetch('./bot_connection_status');
+            const data = await fetch(baseUrl + '/bot_connection_status');
             return await data.text();
         }
 
@@ -45,14 +47,14 @@
          * Bot Request Connect
          */
         async function fetch_brc() {
-            await fetch('./bot_request_connect');
+            await fetch(baseUrl + '/bot_request_connect');
         }
 
         /**
          * Bot Send Msg
          */
         async function fetch_bsm() {
-            const data = await fetch('./bot_send_msg');
+            const data = await fetch(baseUrl + '/bot_send_msg');
             return await data.json();
         }
 
